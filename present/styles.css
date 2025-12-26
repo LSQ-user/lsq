@@ -1,0 +1,200 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow: hidden;
+    height: 100vh;
+}
+
+#container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#header {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+}
+
+#header h1 {
+    font-size: 24px;
+    font-weight: 300;
+}
+
+#info {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    align-items: center;
+}
+
+#info span {
+    font-weight: bold;
+    color: #4ade80;
+}
+
+#angleInfo {
+    display: flex;
+    gap: 15px;
+    font-size: 13px;
+}
+
+#angleInfo > span {
+    color: #a78bfa;
+}
+
+#angleInfo > span > span {
+    color: #4ade80;
+    font-weight: bold;
+}
+
+#keyboardHint {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: #a78bfa;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 50;
+    border: 1px solid rgba(167, 139, 250, 0.3);
+}
+
+#glCanvas {
+    flex: 1;
+    display: block;
+    cursor: grab;
+    background: #000;
+    min-height: 0;
+    width: 100%;
+}
+
+#glCanvas:active {
+    cursor: grabbing;
+}
+
+#controls {
+    background: rgba(20, 20, 30, 0.95);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    gap: 30px;
+    overflow-x: auto;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+    min-height: 180px;
+    max-height: 280px;
+    overflow-y: auto;
+    border-top: 2px solid rgba(167, 139, 250, 0.3);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 160px;
+    flex-shrink: 0;
+}
+
+.control-group h3 {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #a78bfa;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 5px;
+}
+
+.control-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    min-height: 28px;
+}
+
+.control-group label > span:first-child {
+    min-width: 80px;
+    flex-shrink: 0;
+}
+
+.control-group label > span:last-child {
+    min-width: 40px;
+    text-align: right;
+    color: #a78bfa;
+    font-weight: bold;
+}
+
+.control-group input[type="range"] {
+    flex: 1;
+    min-width: 100px;
+    cursor: pointer;
+    height: 20px;
+}
+
+.control-group label > input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    flex-shrink: 0;
+}
+
+.control-group input[type="checkbox"] {
+    cursor: pointer;
+}
+
+/* 滚动条样式 */
+#controls::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+#controls::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+#controls::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+#controls::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* 确保控件可见 */
+.control-group h3,
+.control-group label,
+.control-group input {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 响应式布局 */
+@media (max-width: 768px) {
+    #controls {
+        gap: 20px;
+        padding: 12px 15px;
+    }
+    
+    .control-group {
+        min-width: 140px;
+    }
+}
+

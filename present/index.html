@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时交互3D场景渲染系统</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container">
+        <div id="header">
+            <h1>实时交互3D场景渲染系统</h1>
+            <div id="info">
+                <div>FPS: <span id="fps">0</span></div>
+                <div>Draw Calls: <span id="drawCalls">0</span></div>
+                <div>Triangles: <span id="triangles">0</span></div>
+                <div id="angleInfo">
+                    <span>水平角度: <span id="currentTheta">45</span>°</span>
+                    <span>垂直角度: <span id="currentPhi">45</span>°</span>
+                </div>
+            </div>
+            <div id="keyboardHint">
+                提示：使用方向键（↑↓←→）可以调整视角角度
+            </div>
+        </div>
+        <canvas id="glCanvas"></canvas>
+    <div id="controls">
+            <div class="control-group">
+                <h3>摄像机控制</h3>
+                <label>
+                    <span>视角距离:</span>
+                    <input type="range" id="distance" min="5" max="20" value="10">
+                    <span id="distanceValue">10</span>
+                </label>
+                <label>
+                    <span>水平角度:</span>
+                    <input type="range" id="theta" min="0" max="360" value="45">
+                    <span id="thetaValue">45</span>
+                </label>
+                <label>
+                    <span>垂直角度:</span>
+                    <input type="range" id="phi" min="0" max="180" value="45">
+                    <span id="phiValue">45</span>
+                </label>
+            </div>
+            <div class="control-group">
+                <h3>方向光</h3>
+                <label>
+                    <input type="checkbox" id="dirLight" checked> 启用
+                </label>
+                <label>
+                    <span>强度:</span>
+                    <input type="range" id="dirLightIntensity" min="0" max="2" step="0.1" value="0.8">
+                    <span id="dirLightIntensityValue">0.8</span>
+                </label>
+                <label>
+                    <span>颜色R:</span>
+                    <input type="range" id="dirLightColorR" min="0" max="1" step="0.1" value="1.0">
+                    <span id="dirLightColorRValue">1.0</span>
+                </label>
+                <label>
+                    <span>颜色G:</span>
+                    <input type="range" id="dirLightColorG" min="0" max="1" step="0.1" value="1.0">
+                    <span id="dirLightColorGValue">1.0</span>
+                </label>
+                <label>
+                    <span>颜色B:</span>
+                    <input type="range" id="dirLightColorB" min="0" max="1" step="0.1" value="1.0">
+                    <span id="dirLightColorBValue">1.0</span>
+                </label>
+            </div>
+            <div class="control-group">
+                <h3>点光源</h3>
+                <label>
+                    <input type="checkbox" id="pointLight"> 启用
+                </label>
+                <label>
+                    <span>强度:</span>
+                    <input type="range" id="pointLightIntensity" min="0" max="3" step="0.1" value="1.2">
+                    <span id="pointLightIntensityValue">1.2</span>
+                </label>
+                <label>
+                    <span>颜色R:</span>
+                    <input type="range" id="pointLightColorR" min="0" max="1" step="0.1" value="1.0">
+                    <span id="pointLightColorRValue">1.0</span>
+                </label>
+                <label>
+                    <span>颜色G:</span>
+                    <input type="range" id="pointLightColorG" min="0" max="1" step="0.1" value="0.8">
+                    <span id="pointLightColorGValue">0.8</span>
+                </label>
+                <label>
+                    <span>颜色B:</span>
+                    <input type="range" id="pointLightColorB" min="0" max="1" step="0.1" value="0.6">
+                    <span id="pointLightColorBValue">0.6</span>
+                </label>
+            </div>
+            <div class="control-group">
+                <h3>聚光灯</h3>
+                <label>
+                    <input type="checkbox" id="spotLight"> 启用
+                </label>
+                <label>
+                    <span>强度:</span>
+                    <input type="range" id="spotLightIntensity" min="0" max="3" step="0.1" value="1.5">
+                    <span id="spotLightIntensityValue">1.5</span>
+                </label>
+                <label>
+                    <span>颜色R:</span>
+                    <input type="range" id="spotLightColorR" min="0" max="1" step="0.1" value="0.8">
+                    <span id="spotLightColorRValue">0.8</span>
+                </label>
+                <label>
+                    <span>颜色G:</span>
+                    <input type="range" id="spotLightColorG" min="0" max="1" step="0.1" value="0.9">
+                    <span id="spotLightColorGValue">0.9</span>
+                </label>
+                <label>
+                    <span>颜色B:</span>
+                    <input type="range" id="spotLightColorB" min="0" max="1" step="0.1" value="1.0">
+                    <span id="spotLightColorBValue">1.0</span>
+                </label>
+            </div>
+            <div class="control-group">
+                <h3>渲染选项</h3>
+                <label>
+                    <input type="checkbox" id="wireframe"> 线框模式
+                </label>
+                <label>
+                    <input type="checkbox" id="msaa" checked> MSAA反走样
+                </label>
+                <label>
+                    <input type="checkbox" id="animations" checked> 启用动画
+                </label>
+            </div>
+            <div class="control-group">
+                <h3>场景对象</h3>
+                <label>
+                    <input type="checkbox" id="showSphere" checked> 球体
+                </label>
+                <label>
+                    <input type="checkbox" id="showTorus" checked> 环面
+                </label>
+                <label>
+                    <input type="checkbox" id="showCube" checked> 立方体
+                </label>
+            </div>
+        </div>
+    </div>
+    <script src="math.js"></script>
+    <script src="renderer.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
+
